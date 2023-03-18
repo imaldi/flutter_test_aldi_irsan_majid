@@ -1,13 +1,13 @@
 import 'package:flutter_test_aldi_irsan_majid/core/error/exceptions.dart';
-import 'package:flutter_test_aldi_irsan_majid/domain/entities/user_entity.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../core/resources/consts/shared_pref_keys/user_consts.dart';
 import '../models/user_model.dart';
 
 abstract class UserLocalDataSource {
   Future<bool> userLogin(User user);
   Future<bool> userRegister(User user);
   Future<bool> getCachedLogin();
-  Future<void> _cacheLoginResponse(bool isLoggedIn);
   Future<bool> deleteCachedLogin();
 }
 
@@ -33,21 +33,25 @@ class UserLocalDataSourceImpl extends UserLocalDataSource {
     }
   }
 
-  @override
-  Future<void> _cacheLoginResponse(bool isLoggedIn) {
-    // TODO: implement cacheLoginResponse
-    throw UnimplementedError();
+  Future<void> _cacheLoginResponse(bool isLoggedIn) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    var succesSaveLoginStatus = await prefs.setBool(isUserLogin, true);
+
+    if(!succesSaveLoginStatus){
+      throw CachedLoginException();
+    }
   }
 
   @override
-  Future<bool> deleteCachedLogin() {
-    // TODO: implement deleteCachedLogin
-    throw UnimplementedError();
+  Future<bool> deleteCachedLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.remove(isUserLogin);
   }
 
   @override
-  Future<bool> getCachedLogin() {
-    // TODO: implement getCachedLogin
-    throw UnimplementedError();
+  Future<bool> getCachedLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(isUserLogin) ?? false;
   }
 }

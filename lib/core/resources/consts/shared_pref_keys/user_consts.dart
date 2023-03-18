@@ -1,0 +1,1 @@
+const isUserLogin = 'is_user_login';

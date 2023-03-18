@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test_aldi_irsan_majid/core/error/exceptions.dart';
 import 'package:flutter_test_aldi_irsan_majid/core/error/failures.dart';
 import 'package:flutter_test_aldi_irsan_majid/data/datasources/user_local_datasource.dart';
-import 'package:flutter_test_aldi_irsan_majid/domain/entities/user_entity.dart';
 import 'package:flutter_test_aldi_irsan_majid/domain/repositories_contracts/user_repository.dart';
 
 import '../models/user_model.dart';
@@ -12,12 +11,13 @@ class UserRepositoryImpl extends UserRepository {
   UserRepositoryImpl(this._userLocalDataSource);
   @override
   Future<Either<Failure, bool>> login(User user) async {
-    // TODO: implement login in local data source
     try{
       var result = await _userLocalDataSource.userLogin(user);
       return Right(result);
     } on LoginException {
       return Left(LoginFailure());
+    } on CachedLoginException {
+      return Left(CachedLoginFailure());
     } on DatabaseException {
       return Left(DatabaseFailure());
     }
