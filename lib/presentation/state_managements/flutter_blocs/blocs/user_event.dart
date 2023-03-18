@@ -17,3 +17,10 @@ class UserRegisterEvent extends UserEvent {
   @override
   List<Object?> get props => [userParams];
 }
+
+class UserCheckLoginEvent extends UserEvent {
+  NoParams get params => NoParams();
+
+  @override
+  List<Object?> get props => [params];
+}

@@ -12,7 +12,7 @@ final sl = GetIt.instance;
 Future<void> init() async {
   // WidgetsFlutterBinding.ensureInitialized();
   // bloc
-  sl.registerLazySingleton(() => UserBloc(sl(), sl()));
+  sl.registerLazySingleton(() => UserBloc(userLoginUseCase: sl(), userRegisterUseCase: sl(), checkUserLoginStatusUseCase: sl()));
 
   // usecase
   sl.registerFactory(() => UserRegisterUseCase(sl<UserRepository>()));

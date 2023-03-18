@@ -24,6 +24,11 @@ class UserLoginFailed extends UserState {
   List<Object> get props => [];
 }
 
+class NoCachedLogin extends UserState {
+  @override
+  List<Object> get props => [];
+}
+
 class UserRegisterSuccess extends UserState {
   @override
   List<Object> get props => [];
