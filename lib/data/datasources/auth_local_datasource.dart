@@ -4,16 +4,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/resources/consts/shared_pref_keys/user_consts.dart';
 import '../models/user_model.dart';
 
-abstract class UserLocalDataSource {
-  Future<bool> userLogin(User user);
-  Future<bool> userRegister(User user);
+abstract class AuthLocalDataSource {
+  Future<bool> authLogin(User user);
+  Future<bool> authRegister(User user);
   Future<bool> getCachedLogin();
   Future<bool> deleteCachedLogin();
 }
 
-class UserLocalDataSourceImpl extends UserLocalDataSource {
+class AuthLocalDataSourceImpl extends AuthLocalDataSource {
   @override
-  Future<bool> userLogin(User user) {
+  Future<bool> authLogin(User user) {
     bool? loginSuccess;
     if(loginSuccess ?? false){
       _cacheLoginResponse(loginSuccess ?? false);
@@ -24,7 +24,7 @@ class UserLocalDataSourceImpl extends UserLocalDataSource {
   }
 
   @override
-  Future<bool> userRegister(User user) {
+  Future<bool> authRegister(User user) {
     bool? registerSuccess;
     if(registerSuccess ?? false){
       return Future.value(true);

@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_test_aldi_irsan_majid/data/datasources/user_local_datasource.dart';
+import 'package:flutter_test_aldi_irsan_majid/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_test_aldi_irsan_majid/data/repositories/auth_repository_impl.dart';
 import 'package:flutter_test_aldi_irsan_majid/domain/repositories_contracts/auth_repository.dart';
 import 'package:flutter_test_aldi_irsan_majid/domain/usecases/auth/auth_login_usecase.dart';
@@ -19,9 +19,9 @@ Future<void> init() async {
   sl.registerFactory(() => AuthLoginUseCase(sl<AuthRepository>()));
 
   // repository
-  sl.registerFactory<AuthRepository>(() => AuthRepositoryImpl(sl<UserLocalDataSource>()));
+  sl.registerFactory<AuthRepository>(() => AuthRepositoryImpl(sl<AuthLocalDataSource>()));
 
   // data source
   // local
-  sl.registerFactory<UserLocalDataSource>(() => UserLocalDataSourceImpl());
+  sl.registerFactory<AuthLocalDataSource>(() => AuthLocalDataSourceImpl());
 }
