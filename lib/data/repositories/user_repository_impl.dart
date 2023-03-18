@@ -5,11 +5,13 @@ import 'package:flutter_test_aldi_irsan_majid/data/datasources/user_local_dataso
 import 'package:flutter_test_aldi_irsan_majid/domain/entities/user_entity.dart';
 import 'package:flutter_test_aldi_irsan_majid/domain/repositories_contracts/user_repository.dart';
 
+import '../models/user_model.dart';
+
 class UserRepositoryImpl extends UserRepository {
   final UserLocalDataSource _userLocalDataSource;
   UserRepositoryImpl(this._userLocalDataSource);
   @override
-  Future<Either<Failure, bool>> login(UserEntity user) async {
+  Future<Either<Failure, bool>> login(User user) async {
     // TODO: implement login in local data source
     try{
       var result = await _userLocalDataSource.userLogin(user);
@@ -22,7 +24,7 @@ class UserRepositoryImpl extends UserRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> register(UserEntity user) async {
+  Future<Either<Failure, bool>> register(User user) async {
     try{
       var result = await _userLocalDataSource.userRegister(user);
       return Right(result);
