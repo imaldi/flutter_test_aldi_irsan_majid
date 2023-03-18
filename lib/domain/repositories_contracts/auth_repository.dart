@@ -4,7 +4,7 @@ import 'package:flutter_test_aldi_irsan_majid/domain/repositories_contracts/base
 import '../../core/error/failures.dart';
 import '../../data/models/user_model.dart';
 
-abstract class UserRepository extends BaseRepository<User> {
+abstract class AuthRepository extends BaseRepository<User> {
   Future<Either<Failure, bool>> register(User user);
   Future<Either<Failure, bool>> login(User user);
   Future<Either<Failure, bool>> checkUserLoginStatus();

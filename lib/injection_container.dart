@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_test_aldi_irsan_majid/data/datasources/user_local_datasource.dart';
-import 'package:flutter_test_aldi_irsan_majid/data/repositories/user_repository_impl.dart';
-import 'package:flutter_test_aldi_irsan_majid/domain/repositories_contracts/user_repository.dart';
-import 'package:flutter_test_aldi_irsan_majid/domain/usecases/user_login_usecase.dart';
-import 'package:flutter_test_aldi_irsan_majid/domain/usecases/user_register_usecase.dart';
-import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/blocs/user_bloc.dart';
+import 'package:flutter_test_aldi_irsan_majid/data/repositories/auth_repository_impl.dart';
+import 'package:flutter_test_aldi_irsan_majid/domain/repositories_contracts/auth_repository.dart';
+import 'package:flutter_test_aldi_irsan_majid/domain/usecases/auth/auth_login_usecase.dart';
+import 'package:flutter_test_aldi_irsan_majid/domain/usecases/auth/auth_register_usecase.dart';
+import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/blocs/auth/auth_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 final sl = GetIt.instance;
@@ -12,14 +12,14 @@ final sl = GetIt.instance;
 Future<void> init() async {
   // WidgetsFlutterBinding.ensureInitialized();
   // bloc
-  sl.registerLazySingleton(() => UserBloc(userLoginUseCase: sl(), userRegisterUseCase: sl(), checkUserLoginStatusUseCase: sl()));
+  sl.registerLazySingleton(() => AuthBloc(authLoginUseCase: sl(), authRegisterUseCase: sl(), checkAuthLoginStatusUseCase: sl()));
 
   // usecase
-  sl.registerFactory(() => UserRegisterUseCase(sl<UserRepository>()));
-  sl.registerFactory(() => UserLoginUseCase(sl<UserRepository>()));
+  sl.registerFactory(() => AuthRegisterUseCase(sl<AuthRepository>()));
+  sl.registerFactory(() => AuthLoginUseCase(sl<AuthRepository>()));
 
   // repository
-  sl.registerFactory<UserRepository>(() => UserRepositoryImpl(sl<UserLocalDataSource>()));
+  sl.registerFactory<AuthRepository>(() => AuthRepositoryImpl(sl<UserLocalDataSource>()));
 
   // data source
   // local

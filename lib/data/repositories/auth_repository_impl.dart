@@ -2,13 +2,13 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter_test_aldi_irsan_majid/core/error/exceptions.dart';
 import 'package:flutter_test_aldi_irsan_majid/core/error/failures.dart';
 import 'package:flutter_test_aldi_irsan_majid/data/datasources/user_local_datasource.dart';
-import 'package:flutter_test_aldi_irsan_majid/domain/repositories_contracts/user_repository.dart';
+import 'package:flutter_test_aldi_irsan_majid/domain/repositories_contracts/auth_repository.dart';
 
 import '../models/user_model.dart';
 
-class UserRepositoryImpl extends UserRepository {
+class AuthRepositoryImpl extends AuthRepository {
   final UserLocalDataSource _userLocalDataSource;
-  UserRepositoryImpl(this._userLocalDataSource);
+  AuthRepositoryImpl(this._userLocalDataSource);
   @override
   Future<Either<Failure, bool>> login(User user) async {
     try{
