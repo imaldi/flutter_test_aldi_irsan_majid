@@ -1,13 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter_test_aldi_irsan_majid/domain/entities/user_entity.dart';
 import 'package:flutter_test_aldi_irsan_majid/domain/repositories_contracts/base_repository/base_repository.dart';
+import '../../data/models/user_model.dart';
 import '../error/failures.dart';
 
 // Parameters have to be put into a container object so that they can be
 // included in this abstract base class method definition.
-abstract class UseCase<Type, Params, Repository extends BaseRepository<Type>> {
-  abstract final Repository repository;
+abstract class UseCase<Type, Params> {
   Future<Either<Failure, Type>> call(Params params);
 }
 
@@ -19,7 +18,7 @@ class NoParams extends Equatable {
 }
 
 class UserParams extends Equatable {
-  final UserEntity user;
+  final User user;
   const UserParams(this.user);
   @override
   List<Object?> get props => [user];

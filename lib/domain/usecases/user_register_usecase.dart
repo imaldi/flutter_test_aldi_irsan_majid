@@ -5,11 +5,10 @@ import 'package:flutter_test_aldi_irsan_majid/domain/entities/user_entity.dart';
 
 import '../repositories_contracts/user_repository.dart';
 
-class UserRegisterUseCase extends UseCase<UserEntity, UserParams, UserRepository>{
-  @override
-  final UserRepository repository;
+class UserRegisterUseCase extends UseCase<UserEntity, UserParams>{
+  final UserRepository _repository;
 
-  UserRegisterUseCase(this.repository);
+  UserRegisterUseCase(this._repository);
 
   @override
   Future<Either<Failure, UserEntity>> call(UserParams params) {

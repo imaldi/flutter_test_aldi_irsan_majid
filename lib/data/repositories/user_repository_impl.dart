@@ -35,4 +35,24 @@ class UserRepositoryImpl extends UserRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, bool>> checkUserLoginStatus() async {
+    try{
+      var result = await _userLocalDataSource.getCachedLogin();
+      return Right(result);
+    } on CachedLoginException {
+      return Left(CachedLoginFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, bool>> logout() async {
+    try{
+      var result = await _userLocalDataSource.deleteCachedLogin();
+      return Right(result);
+    } on CachedLoginException {
+      return Left(LogoutFailure());
+    }
+  }
+
 }

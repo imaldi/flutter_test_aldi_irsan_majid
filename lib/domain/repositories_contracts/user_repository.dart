@@ -7,4 +7,6 @@ import '../../data/models/user_model.dart';
 abstract class UserRepository extends BaseRepository<User> {
   Future<Either<Failure, bool>> register(User user);
   Future<Either<Failure, bool>> login(User user);
+  Future<Either<Failure, bool>> checkUserLoginStatus();
+  Future<Either<Failure, bool>> logout();
 }
