@@ -24,38 +24,38 @@ import 'presentation/screens/home_screen.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  // WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
   // db
-  sl.registerLazySingletonAsync<Database>(() async => await openDatabase(dbName,
-    version: 1,
-    onCreate: (Database db, int version) async {
-      // When creating the db, create the table
-      await db.execute(
-          'CREATE TABLE $userTable (id INTEGER PRIMARY KEY, name TEXT DEFAULT '', email TEXT DEFAULT '', password TEXT DEFAULT '', address TEXT DEFAULT '', gender TEXT DEFAULT '', phone_number TEXT DEFAULT '',)');
-    }
-  ));
+  // sl.registerLazySingletonAsync<Database>(() async => await openDatabase(dbName,
+  //   version: 1,
+  //   onCreate: (Database db, int version) async {
+  //     // When creating the db, create the table
+  //     await db.execute(
+  //         'CREATE TABLE $userTable (id INTEGER PRIMARY KEY, name TEXT, email TEXT, password TEXT, address TEXT, gender TEXT, phone_number TEXT)');
+  //   }
+  // ));
 
   // bloc
   sl.registerLazySingleton(() => AuthBloc(authLoginUseCase: sl(), authRegisterUseCase: sl(), checkAuthLoginStatusUseCase: sl()));
-  sl.registerFactory(() => EmployeeBloc(sl(), sl(), sl(), sl(), sl()));
+  sl.registerLazySingleton(() => EmployeeBloc(sl(), sl(), sl(), sl(), sl()));
 
   // usecase
-  sl.registerFactory(() => AuthRegisterUseCase(sl<AuthRepository>()));
-  sl.registerFactory(() => AuthLoginUseCase(sl<AuthRepository>()));
-  sl.registerFactory(() => AuthCheckLoginStatusUseCase(sl<AuthRepository>()));
-  sl.registerFactory(() => CreateEmployeeUsecase(sl<EmployeeRepository>()));
-  sl.registerFactory(() => ReadAllEmployeeUsecase(sl<EmployeeRepository>()));
-  sl.registerFactory(() => ReadOneEmployeeUsecase(sl<EmployeeRepository>()));
-  sl.registerFactory(() => UpdateEmployeeUsecase(sl<EmployeeRepository>()));
-  sl.registerFactory(() => DeleteEmployeeUsecase(sl<EmployeeRepository>()));
+  sl.registerLazySingleton(() => AuthRegisterUseCase(sl<AuthRepository>()));
+  sl.registerLazySingleton(() => AuthLoginUseCase(sl<AuthRepository>()));
+  sl.registerLazySingleton(() => AuthCheckLoginStatusUseCase(sl<AuthRepository>()));
+  sl.registerLazySingleton(() => CreateEmployeeUsecase(sl<EmployeeRepository>()));
+  sl.registerLazySingleton(() => ReadAllEmployeeUsecase(sl<EmployeeRepository>()));
+  sl.registerLazySingleton(() => ReadOneEmployeeUsecase(sl<EmployeeRepository>()));
+  sl.registerLazySingleton(() => UpdateEmployeeUsecase(sl<EmployeeRepository>()));
+  sl.registerLazySingleton(() => DeleteEmployeeUsecase(sl<EmployeeRepository>()));
 
   // repository
-  sl.registerFactory<AuthRepository>(() => AuthRepositoryImpl(sl<AuthLocalDataSource>()));
-  sl.registerFactory<EmployeeRepository>(() => EmployeeRepositoryImpl(sl<EmployeeLocalDatasource>()));
+  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl<AuthLocalDataSource>()));
+  sl.registerLazySingleton<EmployeeRepository>(() => EmployeeRepositoryImpl(sl<EmployeeLocalDatasource>()));
 
   // data source
   // local
-  sl.registerFactory<AuthLocalDataSource>(() => AuthLocalDataSourceImpl(sl<Database>()));
-  sl.registerFactory<EmployeeLocalDatasource>(() => EmployeeLocalDatasourceImpl(sl<Database>()));
+  sl.registerLazySingleton<AuthLocalDataSource>(() => AuthLocalDataSourceImpl());
+  sl.registerLazySingleton<EmployeeLocalDatasource>(() => EmployeeLocalDatasourceImpl());
 }

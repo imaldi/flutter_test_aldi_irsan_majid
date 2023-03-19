@@ -1,4 +1,5 @@
 import 'package:flutter_test_aldi_irsan_majid/core/error/exceptions.dart';
+import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/blocs/auth/auth_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -14,11 +15,14 @@ abstract class AuthLocalDataSource {
 }
 
 class AuthLocalDataSourceImpl extends AuthLocalDataSource {
-  final Database db;
-  AuthLocalDataSourceImpl(this.db);
+  // final Database db;
+  AuthLocalDataSourceImpl(
+      // this.db
+      );
   @override
   Future<bool> authLogin(User user) async {
     bool? loginSuccess;
+    var db = await openDatabase(dbName);
     List<Map> maps = await db.query(userTable,
       columns: allUserColumns,
       where: '$userEmail = ? and $userPassword = ?',
@@ -37,7 +41,9 @@ class AuthLocalDataSourceImpl extends AuthLocalDataSource {
   @override
   Future<bool> authRegister(User user) async {
     try{
-    var id = await db.insert(userTable, user.toMap());
+      var db = await openDatabase(dbName);
+
+      var id = await db.insert(userTable, user.toMap());
     if(id == 0){
       throw DatabaseOperationException();
     }
@@ -67,6 +73,10 @@ class AuthLocalDataSourceImpl extends AuthLocalDataSource {
   @override
   Future<bool> getCachedLogin() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(isUserLogin) ?? false;
+    var isLogin =  prefs.getBool(isUserLogin) ?? false;
+    if(isLogin){
+      return true;
+    }
+    throw CachedLoginException();
   }
 }

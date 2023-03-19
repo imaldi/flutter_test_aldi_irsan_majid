@@ -14,10 +14,12 @@ abstract class EmployeeLocalDatasource {
 }
 
 class EmployeeLocalDatasourceImpl extends EmployeeLocalDatasource {
-    Database appDB;
-    EmployeeLocalDatasourceImpl(this.appDB);
+    // Database appDB;
+    // EmployeeLocalDatasourceImpl(this.appDB);
   @override
   Future<bool> createEmployee(User user) async{
+    var appDB = await openDatabase(dbName);
+
     var id = await appDB.insert(userTable, user.toMap());
     if(id == 0){
       throw DatabaseOperationException();
@@ -27,6 +29,8 @@ class EmployeeLocalDatasourceImpl extends EmployeeLocalDatasource {
 
   @override
   Future<bool> deleteEmployee(int id) async {
+    var appDB = await openDatabase(dbName);
+
     var deletedRows = await appDB.delete(userTable, where: '$userId = ?', whereArgs: [id]);
     if(deletedRows == 0){
       throw DatabaseOperationException();
@@ -37,6 +41,8 @@ class EmployeeLocalDatasourceImpl extends EmployeeLocalDatasource {
   @override
   Future<List<User>> readAllEmployee() async {
     try{
+      var appDB = await openDatabase(dbName);
+
       List<Map> maps = await appDB.query(userTable,
         columns: allUserColumns,
       );
@@ -53,6 +59,8 @@ class EmployeeLocalDatasourceImpl extends EmployeeLocalDatasource {
 
   @override
   Future<User?> readOneEmployee(int id) async {
+    var appDB = await openDatabase(dbName);
+
     List<Map> maps = await appDB.query(userTable,
       columns: allUserColumns,
       where: '$userId = ?',
@@ -67,6 +75,8 @@ class EmployeeLocalDatasourceImpl extends EmployeeLocalDatasource {
 
   @override
   Future<bool> updateEmployee(User user) async {
+    var appDB = await openDatabase(dbName);
+
     var updateRows = await appDB.update(userTable, user.toMap(),
         where: '$userId = ?', whereArgs: [user.id]);
     if(updateRows == 0){

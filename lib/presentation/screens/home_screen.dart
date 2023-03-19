@@ -15,6 +15,7 @@ class HomeScreen extends StatelessWidget {
             var employeeState = context.read<EmployeeBloc>().state;
             print("employeeState: $employeeState");
             return Center(child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text("Selamat datang di Mobile Legends"),
                 ElevatedButton(onPressed: () {
