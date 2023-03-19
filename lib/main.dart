@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test_aldi_irsan_majid/presentation/screens/detail_screen.dart';
 import 'package:flutter_test_aldi_irsan_majid/presentation/screens/home_screen.dart';
 import 'package:flutter_test_aldi_irsan_majid/presentation/screens/splash_screen.dart';
 import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/blocs/auth/auth_bloc.dart';
+import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/blocs/employee/employee_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sqflite/sqflite.dart';
 
 
@@ -10,7 +13,7 @@ import 'core/resources/consts/db_keys/app_db_consts.dart';
 import 'injection_container.dart';
 import 'injection_container.dart' as di;
 
-
+part './core/routes/go_router.dart';
 void main() async {
   await di.init();
   await openDatabase(dbName,
@@ -33,12 +36,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => sl<AuthBloc>(),
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'Flutter Test Aldi',
+        routerConfig: _router,
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const SplashScreen(),
+        // home: const SplashScreen(),
         // const MyHomePage(title: 'Flutter Demo Home Page'),
       ),
     );

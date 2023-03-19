@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test_aldi_irsan_majid/core/resources/consts/route_path_consts/route_path_consts.dart';
+import 'package:go_router/go_router.dart';
 
 import '../state_managements/flutter_blocs/blocs/employee/employee_bloc.dart';
 
@@ -17,8 +19,9 @@ class HomeScreen extends StatelessWidget {
             return Center(child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Selamat datang di Mobile Legends"),
+                const Text("Selamat datang di Mobile Legends"),
                 ElevatedButton(onPressed: () {
+                  context.go(detailScreen);
                 }, child: Text("Move to Detail"))
               ],
             ),);
