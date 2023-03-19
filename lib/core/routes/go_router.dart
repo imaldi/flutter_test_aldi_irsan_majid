@@ -23,7 +23,16 @@ final GoRouter _router = GoRouter(
                       value: sl<EmployeeBloc>(),
                       child: const AddEmployeeScreen(),
                     );
-                  })
+                  }),
+              GoRoute(
+                  path: 'edit_employee',
+                  name: editEmployee,
+                  builder: (BuildContext context, GoRouterState state) {
+                    return BlocProvider.value(
+                      value: sl<EmployeeBloc>(),
+                      child: EditEmployeeScreen((state.extra as int)),
+                    );
+                  }),
             ]),
         GoRoute(
           path: 'detail',

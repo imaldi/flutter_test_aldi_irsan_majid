@@ -25,6 +25,7 @@ class User extends UserEntity {
       id: id ?? this.id,
       name: name ?? this.name,
       email: email ?? this.email,
+      password: email ?? this.password,
       address: address ?? this.address,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       gender: gender ?? this.gender,
@@ -35,6 +36,7 @@ class User extends UserEntity {
     var map = <String, Object?>{
       userName: name,
       userEmail: email,
+      userPassword: password,
       userAddress: address,
       userPhone: phoneNumber,
       userGender: gender,
@@ -48,8 +50,9 @@ class User extends UserEntity {
   factory User.fromMap(Map<String, Object?> map) {
     return User(
       id: (map[userId] as int),
-      name: map[userId].toString(),
+      name: map[userName].toString(),
       email: map[userEmail].toString(),
+      password: map[userPassword].toString(),
       address: map[userAddress].toString(),
       phoneNumber: map[userPhone].toString(),
       gender: map[userGender].toString(),

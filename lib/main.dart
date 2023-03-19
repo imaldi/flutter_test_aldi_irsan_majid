@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_test_aldi_irsan_majid/core/resources/consts/route_path_consts/route_path_consts.dart';
 import 'package:flutter_test_aldi_irsan_majid/presentation/screens/add_employee_screen.dart';
 import 'package:flutter_test_aldi_irsan_majid/presentation/screens/detail_screen.dart';
+import 'package:flutter_test_aldi_irsan_majid/presentation/screens/edit_employee_screen.dart';
 import 'package:flutter_test_aldi_irsan_majid/presentation/screens/home_screen.dart';
 import 'package:flutter_test_aldi_irsan_majid/presentation/screens/splash_screen.dart';
 import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/blocs/auth/auth_bloc.dart';

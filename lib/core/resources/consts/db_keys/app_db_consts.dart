@@ -11,6 +11,7 @@ const allUserColumns = [
   userId,
   userName,
   userEmail,
+  userPassword,
   userAddress,
   userGender,
   userPhone,

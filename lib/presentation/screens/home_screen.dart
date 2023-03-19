@@ -27,11 +27,30 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, state) {
             // var employeeState = context.read<EmployeeBloc>().state;
             print("employeeState: $state");
+            if(state is EmployeeLoading){
+              return const Center(child: CircularProgressIndicator(),);
+            }
             if(state is EmployeeListEmpty){
-              return Center(child: Text("Belum ada Karyawan"),);
+              return const Center(child: Text("Belum ada Karyawan"),);
             }
             if(state is ReadAllEmployeeSucces){
-              return Center(child: Text(state.employeeList.toString()),);
+              return
+                ListView.builder(
+                    itemCount: state.employeeList.length,
+                    itemBuilder: (c,i){
+                  return Card(
+                    child: ListTile(
+                      onTap: (){
+                        // context.goNamed(editEmployee,params: {"id":(state.employeeList[i].id ?? 0).toString()});
+                        // final String location = context.namedLocation(editEmployee, params: {'id': (state.employeeList[i].id ?? 0).toString()});
+                        // context.go(location);
+                        context.go("/home/edit_employee",extra: state.employeeList[i].id);
+                      },
+                      title: Text(state.employeeList[i].name ?? "-"),),
+                  );
+
+                });
+                // Center(child: Text(state.employeeList.toString()),);
             }
             return Center(child: Column(
               mainAxisAlignment: MainAxisAlignment.center,

@@ -59,7 +59,7 @@ class EmployeeRepositoryImpl extends EmployeeRepository {
   @override
   Future<Either<Failure, bool>> updateEmployee(User user) async {
     try{
-      var isSuccess = await _employeeLocalDatasource.createEmployee(user);
+      var isSuccess = await _employeeLocalDatasource.updateEmployee(user);
       return Right(isSuccess);
     } on DatabaseOperationException {
       return Left(DatabaseFailure());

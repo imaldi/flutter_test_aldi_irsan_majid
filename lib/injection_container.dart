@@ -38,7 +38,7 @@ Future<void> init() async {
 
   // bloc
   sl.registerLazySingleton(() => AuthBloc(authLoginUseCase: sl(), authRegisterUseCase: sl(), checkAuthLoginStatusUseCase: sl()));
-  sl.registerFactory(() => EmployeeBloc(sl(), sl(), sl(), sl(), sl()));
+  sl.registerLazySingleton(() => EmployeeBloc(sl(), sl(), sl(), sl(), sl()));
 
   // usecase
   sl.registerLazySingleton(() => AuthRegisterUseCase(sl<AuthRepository>()));
