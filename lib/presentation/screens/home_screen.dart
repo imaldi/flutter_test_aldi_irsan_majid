@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test_aldi_irsan_majid/core/resources/consts/route_path_consts/route_path_consts.dart';
+import 'package:flutter_test_aldi_irsan_majid/core/resources/helper/toast_helper/my_toast.dart';
 import 'package:flutter_test_aldi_irsan_majid/core/usecase/usecase.dart';
 import 'package:flutter_test_aldi_irsan_majid/data/models/user_model.dart';
 import 'package:go_router/go_router.dart';
@@ -27,6 +28,15 @@ class _HomeScreenState extends State<HomeScreen> {
         body: BlocConsumer<EmployeeBloc, EmployeeState>(
           listener: (c,s){
             if(s is CreateEmployeeSucces || s is UpdateEmployeeSucces || s is DeleteEmployeeSucces){
+              if(s is CreateEmployeeSucces){
+                myToast("Success Create Employee");
+              }
+              if(s is UpdateEmployeeSucces){
+                myToast("Success Update Employee");
+              }
+              if(s is CreateEmployeeSucces){
+                myToast("Success Delete Employee");
+              }
               c.read<EmployeeBloc>().add(ReadAllEmployeeEvent(NoParams()));
             }
           },
@@ -67,6 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: (){
+            myToast("Add User");
             context.push("/home/add_employee");
           },
           child: Icon(Icons.add),

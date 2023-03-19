@@ -2,19 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test_aldi_irsan_majid/core/usecase/usecase.dart';
 import 'package:flutter_test_aldi_irsan_majid/presentation/widgets/MyTextField.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../data/models/user_model.dart';
 import '../state_managements/flutter_blocs/blocs/employee/employee_bloc.dart';
+import 'package:go_router/go_router.dart';
 
-class AddEmployeeScreen extends StatefulWidget {
-  const AddEmployeeScreen({Key? key}) : super(key: key);
+class CreateOrEditEmployeeScreen extends StatefulWidget {
+  final int? id;
+
+  const CreateOrEditEmployeeScreen({this.id, Key? key}) : super(key: key);
 
   @override
-  State<AddEmployeeScreen> createState() => _AddEmployeeScreenState();
+  State<CreateOrEditEmployeeScreen> createState() =>
+      _CreateOrEditEmployeeScreenState();
 }
 
-class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
+class _CreateOrEditEmployeeScreenState
+    extends State<CreateOrEditEmployeeScreen> {
   var nameCtrl = TextEditingController();
   var emailCtrl = TextEditingController();
   var passwordCtrl = TextEditingController();
@@ -23,10 +27,19 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
   var gender = "L";
 
   @override
+  void initState() {
+    super.initState();
+    if(widget.id != null){
+      context
+          .read<EmployeeBloc>()
+          .add(ReadOneEmployeeEvent(UserParams(User(id: widget.id))));
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       var blocInstance = context.read<EmployeeBloc>();
-
       return WillPopScope(
         onWillPop: () {
           blocInstance.add(ReadAllEmployeeEvent(NoParams()));
@@ -36,12 +49,23 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
           body: Center(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 32.0),
-              child: BlocBuilder<EmployeeBloc, EmployeeState>(
+              child: BlocConsumer<EmployeeBloc, EmployeeState>(
+                listener: (c, s) {
+                  if (s is ReadOneEmployeeSucces) {
+                    nameCtrl.text = s.employee.name ?? "";
+                    emailCtrl.text = s.employee.email ?? "";
+                    passwordCtrl.text = s.employee.password ?? "";
+                    addressCtrl.text = s.employee.address ?? "";
+                    phoneNumberCtrl.text = s.employee.phoneNumber ?? "";
+                    gender = s.employee.gender ?? "L";
+                  }
+                },
                 builder: (context, state) {
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text("Form Registrasi"),
+                      Text("ID: ${widget.id}"),
                       MyTextField(
                         controller: nameCtrl,
                         decoration: InputDecoration(label: Text("Nama")),
@@ -49,10 +73,12 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                       MyTextField(
                         controller: emailCtrl,
                         decoration: InputDecoration(label: Text("Email")),
+                        keyboardType: TextInputType.emailAddress,
                       ),
                       MyTextField(
                         controller: passwordCtrl,
                         decoration: InputDecoration(label: Text("Password")),
+                        obscureText: true,
                       ),
                       MyTextField(
                         controller: addressCtrl,
@@ -63,6 +89,7 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
                         controller: phoneNumberCtrl,
                         decoration:
                             InputDecoration(label: Text("Phone Number")),
+                        keyboardType: TextInputType.phone,
                       ),
                       Container(
                         padding: EdgeInsets.symmetric(vertical: 16),
@@ -95,16 +122,25 @@ class _AddEmployeeScreenState extends State<AddEmployeeScreen> {
 
                       ElevatedButton(
                           onPressed: () {
-                            context
-                                .read<EmployeeBloc>()
-                                .add(CreateEmployeeEvent(UserParams(User(
-                                  name: nameCtrl.text,
-                                  email: emailCtrl.text,
-                                  password: passwordCtrl.text,
-                                  address: addressCtrl.text,
-                                  phoneNumber: phoneNumberCtrl.text,
-                                  gender: gender,
-                                ))));
+                            var addedEvent = widget.id != null
+                                ? UpdateEmployeeEvent(UserParams(User(
+                                    id: widget.id,
+                                    name: nameCtrl.text,
+                                    email: emailCtrl.text,
+                                    password: passwordCtrl.text,
+                                    address: addressCtrl.text,
+                                    phoneNumber: phoneNumberCtrl.text,
+                                    gender: gender,
+                                  )))
+                                : CreateEmployeeEvent(UserParams(User(
+                                    name: nameCtrl.text,
+                                    email: emailCtrl.text,
+                                    password: passwordCtrl.text,
+                                    address: addressCtrl.text,
+                                    phoneNumber: phoneNumberCtrl.text,
+                                    gender: gender,
+                                  )));
+                            context.read<EmployeeBloc>().add(addedEvent);
                             context.pop();
                           },
                           child: Text("Add Employee"))
