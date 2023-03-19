@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../state_managements/flutter_blocs/blocs/employee/employee_bloc.dart';
+
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -7,13 +10,18 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text("Hallooo"),),
-        body: Center(child: Column(
-          children: [
-            Text("Selamat datang di Mobile Legends"),
-            ElevatedButton(onPressed: (){
-              context.go('/detail');
-            }, child: Text("Move to Detail"))
-          ],
-        ),));
+        body: BlocBuilder<EmployeeBloc, EmployeeState>(
+          builder: (context, state) {
+            var employeeState = context.read<EmployeeBloc>().state;
+            print("employeeState: $employeeState");
+            return Center(child: Column(
+              children: [
+                Text("Selamat datang di Mobile Legends"),
+                ElevatedButton(onPressed: () {
+                }, child: Text("Move to Detail"))
+              ],
+            ),);
+          },
+        ));
   }
 }

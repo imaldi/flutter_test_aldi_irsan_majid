@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_test_aldi_irsan_majid/presentation/screens/detail_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test_aldi_irsan_majid/presentation/screens/home_screen.dart';
-import 'package:go_router/go_router.dart';
-part './core/routes/app_routes.dart';
+import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/blocs/auth/auth_bloc.dart';
+
+
+import 'injection_container.dart';
+
+
 void main() {
   runApp(const MyApp());
 }
-
 
 
 class MyApp extends StatelessWidget {
@@ -15,14 +18,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Flutter Test Aldi',
-      routerConfig: _router,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
+    return BlocProvider(
+      create: (context) => sl<AuthBloc>(),
+      child: MaterialApp(
+        title: 'Flutter Test Aldi',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const HomeScreen(),
+        // const MyHomePage(title: 'Flutter Demo Home Page'),
       ),
-      // home: const HomeScreen(),
-      // const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }

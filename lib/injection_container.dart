@@ -17,7 +17,6 @@ import 'package:flutter_test_aldi_irsan_majid/domain/usecases/employee/update_em
 import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/blocs/auth/auth_bloc.dart';
 import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/blocs/employee/employee_bloc.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'presentation/screens/detail_screen.dart';
@@ -42,40 +41,21 @@ Future<void> init() async {
   sl.registerFactory(() => EmployeeBloc(sl(), sl(), sl(), sl(), sl()));
 
   // usecase
-  sl.registerLazySingleton(() => AuthRegisterUseCase(sl<AuthRepository>()));
-  sl.registerLazySingleton(() => AuthLoginUseCase(sl<AuthRepository>()));
-  sl.registerLazySingleton(() => AuthCheckLoginStatusUseCase(sl<AuthRepository>()));
-  sl.registerLazySingleton(() => CreateEmployeeUsecase(sl<EmployeeRepository>()));
-  sl.registerLazySingleton(() => ReadAllEmployeeUsecase(sl<EmployeeRepository>()));
-  sl.registerLazySingleton(() => ReadOneEmployeeUsecase(sl<EmployeeRepository>()));
-  sl.registerLazySingleton(() => UpdateEmployeeUsecase(sl<EmployeeRepository>()));
-  sl.registerLazySingleton(() => DeleteEmployeeUsecase(sl<EmployeeRepository>()));
+  sl.registerFactory(() => AuthRegisterUseCase(sl<AuthRepository>()));
+  sl.registerFactory(() => AuthLoginUseCase(sl<AuthRepository>()));
+  sl.registerFactory(() => AuthCheckLoginStatusUseCase(sl<AuthRepository>()));
+  sl.registerFactory(() => CreateEmployeeUsecase(sl<EmployeeRepository>()));
+  sl.registerFactory(() => ReadAllEmployeeUsecase(sl<EmployeeRepository>()));
+  sl.registerFactory(() => ReadOneEmployeeUsecase(sl<EmployeeRepository>()));
+  sl.registerFactory(() => UpdateEmployeeUsecase(sl<EmployeeRepository>()));
+  sl.registerFactory(() => DeleteEmployeeUsecase(sl<EmployeeRepository>()));
 
   // repository
-  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl<AuthLocalDataSource>()));
-  sl.registerLazySingleton<EmployeeRepository>(() => EmployeeRepositoryImpl(sl<EmployeeLocalDatasource>()));
+  sl.registerFactory<AuthRepository>(() => AuthRepositoryImpl(sl<AuthLocalDataSource>()));
+  sl.registerFactory<EmployeeRepository>(() => EmployeeRepositoryImpl(sl<EmployeeLocalDatasource>()));
 
   // data source
   // local
-  sl.registerLazySingleton<AuthLocalDataSource>(() => AuthLocalDataSourceImpl(sl<Database>()));
-  sl.registerLazySingleton<EmployeeLocalDatasource>(() => EmployeeLocalDatasourceImpl(sl<Database>()));
-
-  // sl.registerSingleton<GoRouter>(GoRouter(
-  //   routes: <RouteBase>[
-  //     GoRoute(
-  //       path: '/',
-  //       builder: (BuildContext context, GoRouterState state) {
-  //         return const HomeScreen();
-  //       },
-  //       routes: <RouteBase>[
-  //         GoRoute(
-  //           path: 'details',
-  //           builder: (BuildContext context, GoRouterState state) {
-  //             return const DetailScreen();
-  //           },
-  //         ),
-  //       ],
-  //     ),
-  //   ],
-  // ));
+  sl.registerFactory<AuthLocalDataSource>(() => AuthLocalDataSourceImpl(sl<Database>()));
+  sl.registerFactory<EmployeeLocalDatasource>(() => EmployeeLocalDatasourceImpl(sl<Database>()));
 }
