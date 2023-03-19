@@ -43,6 +43,16 @@ class DeleteEmployeeSucces extends EmployeeState {
   List<Object?> get props => [];
 }
 
+class EmployeeListEmpty extends EmployeeState {
+  @override
+  List<Object?> get props => [];
+}
+
+class EmployeeNotFound extends EmployeeState {
+  @override
+  List<Object?> get props => [];
+}
+
 class EmployeeCRUDFailed extends EmployeeState {
   final String message;
   const EmployeeCRUDFailed(this.message);

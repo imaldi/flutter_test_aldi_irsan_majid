@@ -13,8 +13,9 @@ class EmployeeRepositoryImpl extends EmployeeRepository {
   Future<Either<Failure, bool>> createEmployee(User user) async {
     try{
       var isSuccess = await _employeeLocalDatasource.createEmployee(user);
-      return Right(isSuccess );
-    } on DatabaseException {
+
+      return Right(isSuccess);
+    } on DatabaseOperationException {
       return Left(DatabaseFailure());
     }
   }
@@ -24,7 +25,7 @@ class EmployeeRepositoryImpl extends EmployeeRepository {
     try{
       var isSuccess = await _employeeLocalDatasource.deleteEmployee(id);
       return Right(isSuccess);
-    } on DatabaseException {
+    } on DatabaseOperationException {
       return Left(DatabaseFailure());
     }
   }
@@ -33,8 +34,11 @@ class EmployeeRepositoryImpl extends EmployeeRepository {
   Future<Either<Failure, List<User>>> readAllEmployee() async {
     try{
       var employeeList = await _employeeLocalDatasource.readAllEmployee();
-      return Right(employeeList);
-    } on DatabaseException {
+      if(employeeList.isNotEmpty) {
+        return Right(employeeList);
+      }
+      return Left(DataNotFoundFailure());
+    } on DatabaseOperationException {
       return Left(DatabaseFailure());
     }
   }
@@ -43,8 +47,11 @@ class EmployeeRepositoryImpl extends EmployeeRepository {
   Future<Either<Failure, User>> readOneEmployee(int id) async {
     try{
       var employeeList = await _employeeLocalDatasource.readOneEmployee(id);
-      return Right(employeeList);
-    } on DatabaseException {
+      if(employeeList != null) {
+        return Right(employeeList);
+      }
+      return Left(DataNotFoundFailure());
+    } on DatabaseOperationException {
       return Left(DatabaseFailure());
     }
   }
@@ -54,7 +61,7 @@ class EmployeeRepositoryImpl extends EmployeeRepository {
     try{
       var isSuccess = await _employeeLocalDatasource.createEmployee(user);
       return Right(isSuccess);
-    } on DatabaseException {
+    } on DatabaseOperationException {
       return Left(DatabaseFailure());
     }
   }

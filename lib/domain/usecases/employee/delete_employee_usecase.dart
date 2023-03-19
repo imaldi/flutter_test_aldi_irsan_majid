@@ -10,8 +10,7 @@ class DeleteEmployeeUsecase extends UseCase<bool, UserParams> {
   DeleteEmployeeUsecase(this._repository);
 
   @override
-  Future<Either<Failure, bool>> call(UserParams params) {
-    // TODO: implement call
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> call(UserParams params) async {
+    return await _repository.deleteEmployee(params.user.id ?? 0);
   }
 }

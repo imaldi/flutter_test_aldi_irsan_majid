@@ -18,7 +18,7 @@ class AuthRepositoryImpl extends AuthRepository {
       return Left(LoginFailure());
     } on CachedLoginException {
       return Left(CachedLoginFailure());
-    } on DatabaseException {
+    } on DatabaseOperationException {
       return Left(DatabaseFailure());
     }
   }
@@ -30,7 +30,7 @@ class AuthRepositoryImpl extends AuthRepository {
       return Right(result);
     } on RegisterException {
       return Left(RegisterFailure());
-    } on DatabaseException {
+    } on DatabaseOperationException {
       return Left(DatabaseFailure());
     }
   }

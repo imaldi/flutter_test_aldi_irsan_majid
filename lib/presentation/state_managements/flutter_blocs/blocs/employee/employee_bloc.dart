@@ -5,6 +5,7 @@ import 'package:flutter_test_aldi_irsan_majid/domain/usecases/employee/delete_em
 import 'package:flutter_test_aldi_irsan_majid/domain/usecases/employee/read_one_employee_usecase.dart';
 import 'package:flutter_test_aldi_irsan_majid/domain/usecases/employee/update_employee_usecase.dart';
 
+import '../../../../../core/error/failures.dart';
 import '../../../../../data/models/user_model.dart';
 import '../../../../../domain/usecases/employee/create_employee_usecase.dart';
 import '../../../../../domain/usecases/employee/read_all_employee_usecase.dart';
@@ -39,7 +40,12 @@ class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
       emit(EmployeeLoading());
       var result = await _readAllEmployeeUsecase(event.param);
       var newState = result.fold(
-          (l) => EmployeeCRUDFailed(l.runtimeType.toString()),
+          (l) {
+            if(l is DataNotFoundFailure){
+              return EmployeeListEmpty();
+            }
+            return EmployeeCRUDFailed(l.runtimeType.toString());
+          },
           (r) => ReadAllEmployeeSucces(r));
       emit(newState);
     });
@@ -47,7 +53,12 @@ class EmployeeBloc extends Bloc<EmployeeEvent, EmployeeState> {
       emit(EmployeeLoading());
       var result = await _readOneEmployeeUsecase(event.param);
       var newState = result.fold(
-          (l) => EmployeeCRUDFailed(l.runtimeType.toString()),
+          (l) {
+            if(l is DataNotFoundFailure){
+              return EmployeeNotFound();
+            }
+            return EmployeeCRUDFailed(l.runtimeType.toString());
+          },
           (r) => ReadOneEmployeeSucces(r));
       emit(newState);
     });

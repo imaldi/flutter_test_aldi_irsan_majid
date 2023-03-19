@@ -9,8 +9,7 @@ class UpdateEmployeeUsecase extends UseCase<bool, UserParams>{
   UpdateEmployeeUsecase(this._repository);
 
   @override
-  Future<Either<Failure, bool>> call(UserParams params) {
-    // TODO: implement call
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> call(UserParams params) async {
+    return await _repository.updateEmployee(params.user);
   }
 }

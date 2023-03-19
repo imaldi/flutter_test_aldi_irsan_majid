@@ -10,9 +10,8 @@ class ReadAllEmployeeUsecase extends UseCase<List<User>,NoParams>{
   ReadAllEmployeeUsecase(this._repository);
 
   @override
-  Future<Either<Failure, List<User>>> call(NoParams params) {
-    // TODO: implement call
-    throw UnimplementedError();
+  Future<Either<Failure, List<User>>> call(NoParams params) async {
+    return await _repository.readAllEmployee();
   }
 
 }
