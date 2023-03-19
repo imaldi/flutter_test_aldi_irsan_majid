@@ -31,80 +31,91 @@ class _EditEmployeeScreenState extends State<EditEmployeeScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: Center(child: Container(
-      padding: EdgeInsets.symmetric(horizontal: 32.0),
-      child: BlocConsumer<EmployeeBloc, EmployeeState>(
-        listener: (c,s){
-          if(s is ReadOneEmployeeSucces){
-            nameCtrl.text = s.employee.name ?? "";
-            emailCtrl.text = s.employee.email ?? "";
-            passwordCtrl.text = s.employee.password ?? "";
-            addressCtrl.text = s.employee.address ?? "";
-            phoneNumberCtrl.text = s.employee.phoneNumber ?? "";
-            gender = s.employee.gender ?? "L";
-          }
-        },
-        builder: (context, state) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text("Form Registrasi"),
-              Text("ID: ${widget.id}"),
-              MyTextField(controller:nameCtrl,decoration: InputDecoration(label: Text("Nama")),),
-              MyTextField(controller:emailCtrl,decoration: InputDecoration(label: Text("Email")),),
-              MyTextField(
-                controller: passwordCtrl,
-                decoration: InputDecoration(label: Text("Password")),),
-              MyTextField(controller:addressCtrl,decoration: InputDecoration(label: Text("Address")),),
-              // MyTextField(controller:genderCtrl, decoration: InputDecoration(label: Text("Gender")),),
-              MyTextField(
-                controller: phoneNumberCtrl,
-                decoration: InputDecoration(label: Text("Phone Number")),),
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Row(
+    return Builder(
+      builder: (context) {
+        var blocInstance = context.read<EmployeeBloc>();
+        return WillPopScope(
+          onWillPop: (){
+            blocInstance.add(ReadAllEmployeeEvent(NoParams()));
+            return Future.value(true);
+          },
+          child: Scaffold(body: Center(child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 32.0),
+            child: BlocConsumer<EmployeeBloc, EmployeeState>(
+              listener: (c,s){
+                if(s is ReadOneEmployeeSucces){
+                  nameCtrl.text = s.employee.name ?? "";
+                  emailCtrl.text = s.employee.email ?? "";
+                  passwordCtrl.text = s.employee.password ?? "";
+                  addressCtrl.text = s.employee.address ?? "";
+                  phoneNumberCtrl.text = s.employee.phoneNumber ?? "";
+                  gender = s.employee.gender ?? "L";
+                }
+              },
+              builder: (context, state) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: Column(
+                    Text("Form Registrasi"),
+                    Text("ID: ${widget.id}"),
+                    MyTextField(controller:nameCtrl,decoration: InputDecoration(label: Text("Nama")),),
+                    MyTextField(controller:emailCtrl,decoration: InputDecoration(label: Text("Email")),),
+                    MyTextField(
+                      controller: passwordCtrl,
+                      decoration: InputDecoration(label: Text("Password")),),
+                    MyTextField(controller:addressCtrl,decoration: InputDecoration(label: Text("Address")),),
+                    // MyTextField(controller:genderCtrl, decoration: InputDecoration(label: Text("Gender")),),
+                    MyTextField(
+                      controller: phoneNumberCtrl,
+                      decoration: InputDecoration(label: Text("Phone Number")),),
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: Row(
                         children: [
-                          Text("Gender"),
-                          DropdownButton(
-                            hint: Text("GBENDER"),
-                              value: gender,
-                              items: const [
-                                DropdownMenuItem(
-                                    value: "L",
-                                    child: Text("L")),
-                                DropdownMenuItem(
-                                    value: "P",
-                                    child: Text("P"))
-                              ], onChanged: (val){
-                            setState(() {
-                              gender = val ?? "L";
-                            });
-                          }),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text("Gender"),
+                                DropdownButton(
+                                  hint: Text("GBENDER"),
+                                    value: gender,
+                                    items: const [
+                                      DropdownMenuItem(
+                                          value: "L",
+                                          child: Text("L")),
+                                      DropdownMenuItem(
+                                          value: "P",
+                                          child: Text("P"))
+                                    ], onChanged: (val){
+                                  setState(() {
+                                    gender = val ?? "L";
+                                  });
+                                }),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
-                  ],
-                ),
-              ),
 
-              ElevatedButton(onPressed: () {
-                context.read<EmployeeBloc>().add(UpdateEmployeeEvent(UserParams(User(
-                  id: widget.id,
-                  name: nameCtrl.text,
-                  email: emailCtrl.text,
-                  password: passwordCtrl.text,
-                  address: addressCtrl.text,
-                  phoneNumber: phoneNumberCtrl.text,
-                  gender: gender,
-                ))));
-                context.pop();
-              }, child: Text("Add Employee"))
-            ],);
-        },
-      ),
-    ),),);
+                    ElevatedButton(onPressed: () {
+                      context.read<EmployeeBloc>().add(UpdateEmployeeEvent(UserParams(User(
+                        id: widget.id,
+                        name: nameCtrl.text,
+                        email: emailCtrl.text,
+                        password: passwordCtrl.text,
+                        address: addressCtrl.text,
+                        phoneNumber: phoneNumberCtrl.text,
+                        gender: gender,
+                      ))));
+                      context.pop();
+                    }, child: Text("Add Employee"))
+                  ],);
+              },
+            ),
+          ),),),
+        );
+      }
+    );
   }
 }

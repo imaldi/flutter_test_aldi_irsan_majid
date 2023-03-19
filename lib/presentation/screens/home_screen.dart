@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_test_aldi_irsan_majid/core/resources/consts/route_path_consts/route_path_consts.dart';
 import 'package:flutter_test_aldi_irsan_majid/core/usecase/usecase.dart';
+import 'package:flutter_test_aldi_irsan_majid/data/models/user_model.dart';
 import 'package:go_router/go_router.dart';
 
 import '../state_managements/flutter_blocs/blocs/employee/employee_bloc.dart';
@@ -23,16 +24,21 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(title: Text("Hallooo"),),
-        body: BlocBuilder<EmployeeBloc, EmployeeState>(
+        body: BlocConsumer<EmployeeBloc, EmployeeState>(
+          listener: (c,s){
+            if(s is CreateEmployeeSucces || s is UpdateEmployeeSucces || s is DeleteEmployeeSucces){
+              c.read<EmployeeBloc>().add(ReadAllEmployeeEvent(NoParams()));
+            }
+          },
           builder: (context, state) {
             // var employeeState = context.read<EmployeeBloc>().state;
             print("employeeState: $state");
             if(state is EmployeeLoading){
               return const Center(child: CircularProgressIndicator(),);
             }
-            if(state is EmployeeListEmpty){
-              return const Center(child: Text("Belum ada Karyawan"),);
-            }
+            // if(state is EmployeeListEmpty){
+            //   return const Center(child: Text("Belum ada Karyawan"),);
+            // }
             if(state is ReadAllEmployeeSucces){
               return
                 ListView.builder(
@@ -41,31 +47,27 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Card(
                     child: ListTile(
                       onTap: (){
-                        // context.goNamed(editEmployee,params: {"id":(state.employeeList[i].id ?? 0).toString()});
-                        // final String location = context.namedLocation(editEmployee, params: {'id': (state.employeeList[i].id ?? 0).toString()});
-                        // context.go(location);
-                        context.go("/home/edit_employee",extra: state.employeeList[i].id);
+                        context.push("/home/edit_employee",extra: state.employeeList[i].id);
                       },
-                      title: Text(state.employeeList[i].name ?? "-"),),
+                      title: Text(state.employeeList[i].name ?? "-"),
+                      trailing: InkWell(onTap: (){
+                        context.read<EmployeeBloc>().add(DeleteEmployeeEvent(UserParams(User(id: state.employeeList[i].id))));
+                      },
+                      child: Icon(Icons.delete),
+                      ),
+                    ),
+
                   );
 
                 });
                 // Center(child: Text(state.employeeList.toString()),);
             }
-            return Center(child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text("Selamat datang di Mobile Legends"),
-                ElevatedButton(onPressed: () {
-                  context.go(detailScreen);
-                }, child: Text("Move to Detail"))
-              ],
-            ),);
+            return const Center(child: Text("Belum ada Karyawan"),);
           },
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: (){
-            context.go("/home/add_employee");
+            context.push("/home/add_employee");
           },
           child: Icon(Icons.add),
         ),
