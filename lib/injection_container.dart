@@ -28,7 +28,7 @@ Future<void> init() async {
     onCreate: (Database db, int version) async {
       // When creating the db, create the table
       await db.execute(
-          'CREATE TABLE $userTable (id INTEGER PRIMARY KEY, name TEXT, email TEXT, address TEXT, gender TEXT, phone_number TEXT,)');
+          'CREATE TABLE $userTable (id INTEGER PRIMARY KEY, name TEXT DEFAULT '', email TEXT DEFAULT '', password TEXT DEFAULT '', address TEXT DEFAULT '', gender TEXT DEFAULT '', phone_number TEXT DEFAULT '',)');
     }
   ));
 
@@ -52,6 +52,6 @@ Future<void> init() async {
 
   // data source
   // local
-  sl.registerLazySingleton<AuthLocalDataSource>(() => AuthLocalDataSourceImpl());
+  sl.registerLazySingleton<AuthLocalDataSource>(() => AuthLocalDataSourceImpl(sl<Database>()));
   sl.registerLazySingleton<EmployeeLocalDatasource>(() => EmployeeLocalDatasourceImpl(sl<Database>()));
 }

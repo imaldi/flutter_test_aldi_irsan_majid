@@ -1,6 +1,8 @@
 import 'package:flutter_test_aldi_irsan_majid/core/error/exceptions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
+import '../../core/resources/consts/db_keys/app_db_consts.dart';
 import '../../core/resources/consts/shared_pref_keys/user_consts.dart';
 import '../models/user_model.dart';
 
@@ -12,11 +14,20 @@ abstract class AuthLocalDataSource {
 }
 
 class AuthLocalDataSourceImpl extends AuthLocalDataSource {
+  final Database db;
+  AuthLocalDataSourceImpl(this.db);
   @override
-  Future<bool> authLogin(User user) {
+  Future<bool> authLogin(User user) async {
     bool? loginSuccess;
-    if(loginSuccess ?? false){
-      _cacheLoginResponse(loginSuccess ?? false);
+    List<Map> maps = await db.query(userTable,
+      columns: allUserColumns,
+      where: '$userEmail = ? and $userPassword = ?',
+      whereArgs: [user.email ?? "", user.password ?? ""],
+      limit: 1,
+    );
+    loginSuccess = maps.isNotEmpty;
+    if(loginSuccess){
+      _cacheLoginResponse(true);
       return Future.value(true);
     } else {
       throw LoginException();
@@ -24,11 +35,15 @@ class AuthLocalDataSourceImpl extends AuthLocalDataSource {
   }
 
   @override
-  Future<bool> authRegister(User user) {
-    bool? registerSuccess;
-    if(registerSuccess ?? false){
-      return Future.value(true);
-    } else {
+  Future<bool> authRegister(User user) async {
+    try{
+    var id = await db.insert(userTable, user.toMap());
+    if(id == 0){
+      throw DatabaseOperationException();
+    }
+    return true;
+
+    } on DatabaseException {
       throw RegisterException();
     }
   }

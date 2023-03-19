@@ -3,6 +3,7 @@ const userTable = 'User';
 const userId = 'id';
 const userName = 'username';
 const userEmail = 'email';
+const userPassword = 'password';
 const userAddress = 'address';
 const userGender = 'gender';
 const userPhone = 'phone_number';

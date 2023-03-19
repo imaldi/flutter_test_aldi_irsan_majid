@@ -7,6 +7,7 @@ class User extends UserEntity {
       {super.id,
       super.name,
       super.email,
+      super.password,
       super.address,
       super.gender,
       super.phoneNumber});
@@ -15,6 +16,7 @@ class User extends UserEntity {
     int? id,
     String? name,
     String? email,
+    String? password,
     String? address,
     String? phoneNumber,
     String? gender,

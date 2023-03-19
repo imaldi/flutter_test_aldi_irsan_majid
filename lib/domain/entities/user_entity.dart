@@ -4,6 +4,7 @@ abstract class UserEntity extends Equatable {
   final int? id;
   final String? name;
   final String? email;
+  final String? password;
   final String? address;
   final String? phoneNumber;
   final String? gender;
@@ -11,6 +12,7 @@ abstract class UserEntity extends Equatable {
     this.id,
     this.name,
     this.email,
+    this.password,
     this.address,
     this.phoneNumber,
     this.gender,
@@ -21,6 +23,7 @@ abstract class UserEntity extends Equatable {
         id,
         name,
         email,
+        password,
         address,
         phoneNumber,
         gender,
