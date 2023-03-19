@@ -22,5 +22,4 @@ class UserParams extends Equatable {
   const UserParams(this.user);
   @override
   List<Object?> get props => [user];
-
 }
