@@ -30,10 +30,10 @@ class _SplashScreenState extends State<SplashScreen> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is NoCachedLogin) {
-          context.go(homeScreen);
+          context.pushReplacement(homeScreen);
         }
         if (state is AuthLoginSuccess) {
-          context.go(detailScreen);
+          context.pushReplacement(detailScreen);
         }
       },
       builder: (context, state) {
