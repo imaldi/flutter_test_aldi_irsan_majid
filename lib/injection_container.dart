@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test_aldi_irsan_majid/core/resources/consts/db_keys/app_db_consts.dart';
 import 'package:flutter_test_aldi_irsan_majid/data/datasources/auth_local_datasource.dart';
 import 'package:flutter_test_aldi_irsan_majid/data/datasources/employee_local_datasource.dart';
@@ -16,7 +17,11 @@ import 'package:flutter_test_aldi_irsan_majid/domain/usecases/employee/update_em
 import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/blocs/auth/auth_bloc.dart';
 import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/blocs/employee/employee_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sqflite/sqflite.dart';
+
+import 'presentation/screens/detail_screen.dart';
+import 'presentation/screens/home_screen.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
@@ -54,4 +59,23 @@ Future<void> init() async {
   // local
   sl.registerLazySingleton<AuthLocalDataSource>(() => AuthLocalDataSourceImpl(sl<Database>()));
   sl.registerLazySingleton<EmployeeLocalDatasource>(() => EmployeeLocalDatasourceImpl(sl<Database>()));
+
+  // sl.registerSingleton<GoRouter>(GoRouter(
+  //   routes: <RouteBase>[
+  //     GoRoute(
+  //       path: '/',
+  //       builder: (BuildContext context, GoRouterState state) {
+  //         return const HomeScreen();
+  //       },
+  //       routes: <RouteBase>[
+  //         GoRoute(
+  //           path: 'details',
+  //           builder: (BuildContext context, GoRouterState state) {
+  //             return const DetailScreen();
+  //           },
+  //         ),
+  //       ],
+  //     ),
+  //   ],
+  // ));
 }
