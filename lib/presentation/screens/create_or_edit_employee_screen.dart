@@ -150,7 +150,7 @@ class _CreateOrEditEmployeeScreenState
                               }
                               context.pop();
                             },
-                            child: Text("Add Employee"))
+                            child: Text(widget.id == null ? "Add Employee" : "Edit Employee"))
                       ],
                     );
                   },

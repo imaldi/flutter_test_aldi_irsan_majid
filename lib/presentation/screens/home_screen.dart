@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (s is UpdateEmployeeSucces) {
                   myToast("Success Update Employee");
                 }
-                if (s is CreateEmployeeSucces) {
+                if (s is DeleteEmployeeSucces) {
                   myToast("Success Delete Employee");
                 }
                 c.read<EmployeeBloc>().add(ReadAllEmployeeEvent(NoParams()));
@@ -82,53 +82,55 @@ class _HomeScreenState extends State<HomeScreen> {
               // }
               if (state is ReadAllEmployeeSucces) {
                 return
-                  Column(
-                    children: [
-                      Builder(
-                        builder: (context) {
-                          var state = context.watch<LocationCubit>().state;
-                          var address = state.address;
-                          var lat = state.latitude;
-                          var lng = state.longitude;
-                          print("address print: ${context.watch<LocationCubit>().state}");
-                          return Padding(
-                            padding: const EdgeInsets.all(sizeMedium),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Lokasi Saat Ini: $address"),
-                                Text("\nLatitude Saat Ini: $lat"),
-                                Text("Longitude Saat Ini: $lng"),
-                              ],
-                            ),
-                          );
-                        }
-                      ),
-                      ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: state.employeeList.length,
-                          itemBuilder: (c, i) {
-                            return Card(
-                              child: ListTile(
-                                onTap: () {
-                                  context.push("/home/edit_employee",
-                                      extra: state.employeeList[i].id);
-                                },
-                                title: Text(state.employeeList[i].name ?? "-"),
-                                trailing: InkWell(onTap: () {
-                                  context.read<EmployeeBloc>().add(
-                                      DeleteEmployeeEvent(UserParams(
-                                          User(id: state.employeeList[i].id))));
-                                },
-                                  child: Icon(Icons.delete),
-                                ),
+                  SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Builder(
+                          builder: (context) {
+                            var state = context.watch<LocationCubit>().state;
+                            var address = state.address;
+                            var lat = state.latitude;
+                            var lng = state.longitude;
+                            print("address print: ${context.watch<LocationCubit>().state}");
+                            return Padding(
+                              padding: const EdgeInsets.all(sizeMedium),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Lokasi Saat Ini: $address"),
+                                  Text("\nLatitude Saat Ini: $lat"),
+                                  Text("Longitude Saat Ini: $lng"),
+                                ],
                               ),
-
                             );
-                          }),
-                    ],
+                          }
+                        ),
+                        ListView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: state.employeeList.length,
+                            itemBuilder: (c, i) {
+                              return Card(
+                                child: ListTile(
+                                  onTap: () {
+                                    context.push("/home/edit_employee",
+                                        extra: state.employeeList[i].id);
+                                  },
+                                  title: Text(state.employeeList[i].name ?? "-"),
+                                  trailing: InkWell(onTap: () {
+                                    context.read<EmployeeBloc>().add(
+                                        DeleteEmployeeEvent(UserParams(
+                                            User(id: state.employeeList[i].id))));
+                                  },
+                                    child: Icon(Icons.delete),
+                                  ),
+                                ),
+
+                              );
+                            }),
+                      ],
+                    ),
                   );
                 // Center(child: Text(state.employeeList.toString()),);
               }
