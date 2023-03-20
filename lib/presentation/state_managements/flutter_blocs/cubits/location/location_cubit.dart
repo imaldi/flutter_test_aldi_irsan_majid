@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-
+import 'package:flutter/services.dart';
+import 'package:trust_location/trust_location.dart';
 import '../../../../../core/params/location_address_params.dart';
 import '../../../../../core/usecase/usecase.dart';
 import '../../../../../domain/usecases/geolocator/get_current_address.dart';
@@ -14,7 +15,7 @@ class LocationCubit extends Cubit<LocationState> {
 
   LocationCubit(this._getCurrentPositionUseCase,this._getCurrentAddressUseCase) : super(LocationState());
 
-  _getAddress(double lat, double long) async {
+  Future<void> _getAddress(double lat, double long) async {
     var eitherPositionOrFailure = await _getCurrentAddressUseCase(LocationAddressParams(latitude: lat, longitude: long));
     var newState = eitherPositionOrFailure.fold(
             (l) => state,
@@ -34,6 +35,7 @@ class LocationCubit extends Cubit<LocationState> {
     emit(newSendScanDataModel);
     if(state.latitude != null && state.longitude != null){
       await _getAddress(state.latitude!, state.longitude!);
+      // _checkMockLocation();
     }
     print("LATITUDE FROM CUBIT: ${state.latitude}");
     print("ADDRESS IN CUBIT: ${state.address}");
@@ -43,4 +45,22 @@ class LocationCubit extends Cubit<LocationState> {
     //   callBackAfterFetchLocation(state.latitude.toString(), state.longitude.toString(), state.address ?? "");
     // }
   }
+
+  Future updateLocationStateFromMock(LocationState newState) async {
+    await _getAddress(newState.latitude ?? 0,newState.longitude ?? 0);
+    emit(state.copyWith(
+        latitude: newState.latitude,
+        longitude: newState.longitude,
+        isMockLocation: newState.isMockLocation));
+  }
+  // _checkMockLocation(){
+  //   try {
+  //     TrustLocation.onChange.listen((values) {
+  //       print("MOCK LOCATION: ${values.isMockLocation}");
+  //       emit(state.copyWith(latitude: double.parse(values.latitude ?? "0"), longitude: double.parse(values.longitude ?? "0"), isMockLocation: values.isMockLocation));
+  //     });
+  //   } on PlatformException catch (e) {
+  //     print('PlatformException $e');
+  //   }
+  // }
 }
