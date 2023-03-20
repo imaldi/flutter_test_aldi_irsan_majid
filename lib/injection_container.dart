@@ -8,6 +8,7 @@ import 'package:flutter_test_aldi_irsan_majid/domain/repositories_contracts/auth
 import 'package:flutter_test_aldi_irsan_majid/domain/repositories_contracts/employee_repository.dart';
 import 'package:flutter_test_aldi_irsan_majid/domain/usecases/auth/auth_check_login_status_usecase.dart';
 import 'package:flutter_test_aldi_irsan_majid/domain/usecases/auth/auth_login_usecase.dart';
+import 'package:flutter_test_aldi_irsan_majid/domain/usecases/auth/auth_logout_usecase.dart';
 import 'package:flutter_test_aldi_irsan_majid/domain/usecases/auth/auth_register_usecase.dart';
 import 'package:flutter_test_aldi_irsan_majid/domain/usecases/employee/create_employee_usecase.dart';
 import 'package:flutter_test_aldi_irsan_majid/domain/usecases/employee/delete_employee_usecase.dart';
@@ -37,13 +38,14 @@ Future<void> init() async {
   // ));
 
   // bloc
-  sl.registerLazySingleton(() => AuthBloc(authLoginUseCase: sl(), authRegisterUseCase: sl(), checkAuthLoginStatusUseCase: sl()));
+  sl.registerLazySingleton(() => AuthBloc(authLoginUseCase: sl(), authRegisterUseCase: sl(), checkAuthLoginStatusUseCase: sl(), authLogoutUseCase: sl()));
   sl.registerLazySingleton(() => EmployeeBloc(sl(), sl(), sl(), sl(), sl()));
 
   // usecase
   sl.registerLazySingleton(() => AuthRegisterUseCase(sl<AuthRepository>()));
   sl.registerLazySingleton(() => AuthLoginUseCase(sl<AuthRepository>()));
   sl.registerLazySingleton(() => AuthCheckLoginStatusUseCase(sl<AuthRepository>()));
+  sl.registerLazySingleton(() => AuthLogoutUseCase(sl<AuthRepository>()));
   sl.registerLazySingleton(() => CreateEmployeeUsecase(sl<EmployeeRepository>()));
   sl.registerLazySingleton(() => ReadAllEmployeeUsecase(sl<EmployeeRepository>()));
   sl.registerLazySingleton(() => ReadOneEmployeeUsecase(sl<EmployeeRepository>()));

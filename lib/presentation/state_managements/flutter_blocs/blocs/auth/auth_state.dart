@@ -26,6 +26,17 @@ class AuthLoginFailed extends AuthState {
   @override
   List<Object> get props => [message];
 }
+class AuthLogoutSuccess extends AuthState {
+  @override
+  List<Object> get props => [];
+}
+
+class AuthLogoutFailed extends AuthState {
+  final String message;
+  const AuthLogoutFailed(this.message);
+  @override
+  List<Object> get props => [message];
+}
 
 class NoCachedLogin extends AuthState {
   @override

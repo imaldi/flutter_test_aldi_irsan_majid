@@ -18,8 +18,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  var emailCtrl = TextEditingController();
-  var passwordCtrl = TextEditingController();
+  var emailCtrl = TextEditingController(text: "aldi@gm");
+  var passwordCtrl = TextEditingController(text: "12345");
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +55,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 authBloc.add(AuthLoginEvent(UserParams(User(
                     email: emailCtrl.text,
                     password: passwordCtrl.text))));
-              }, child: Text("Login"))
+              }, child: Text("Login")),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: sizeMedium),
+                child: Text("or"),
+              ),
+
+              ElevatedButton(onPressed: () {
+                context.push("/register",extra: "Success Register");
+              }, child: Text("Register")),
             ],
           ),
         ),),);

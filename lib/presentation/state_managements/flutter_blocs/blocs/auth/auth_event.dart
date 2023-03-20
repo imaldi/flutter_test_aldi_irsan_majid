@@ -24,4 +24,10 @@ class AuthCheckLoginEvent extends AuthEvent {
   @override
   List<Object?> get props => [params];
 }
+class AuthLogoutEvent extends AuthEvent {
+  NoParams get params => NoParams();
+
+  @override
+  List<Object?> get props => [params];
+}
 

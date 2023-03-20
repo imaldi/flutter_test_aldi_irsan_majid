@@ -29,6 +29,8 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
+        print("Auth State is ${state.runtimeType}");
+
         if (state is NoCachedLogin) {
           context.pushReplacement("/$loginScreen");
           // context.pushReplacement("/$homeScreen");

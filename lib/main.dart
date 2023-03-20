@@ -42,6 +42,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp.router(
         title: 'Flutter Test Aldi',
         routerConfig: _router,
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
