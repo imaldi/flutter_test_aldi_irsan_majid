@@ -13,3 +13,7 @@ class RegisterFailure extends Failure {}
 class LoginFailure extends Failure {}
 class CachedLoginFailure extends Failure {}
 class LogoutFailure extends Failure {}
+class NoInternetFailure extends Failure {}
+class LocationServiceDisabledFailure extends Failure {}
+class PermissionDeniedFailure extends Failure {}
+class LocationFailure extends Failure {}

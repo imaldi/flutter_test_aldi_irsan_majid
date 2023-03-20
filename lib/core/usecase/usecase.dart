@@ -23,3 +23,4 @@ class UserParams extends Equatable {
   @override
   List<Object?> get props => [user];
 }
+

@@ -8,6 +8,8 @@ import 'package:flutter_test_aldi_irsan_majid/presentation/screens/login_screen.
 import 'package:flutter_test_aldi_irsan_majid/presentation/screens/splash_screen.dart';
 import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/blocs/auth/auth_bloc.dart';
 import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/blocs/employee/employee_bloc.dart';
+import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/cubits/internet_connection/internet_connection_cubit.dart';
+import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/cubits/location/location_cubit.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sqflite/sqflite.dart';
 

@@ -27,8 +27,14 @@ final GoRouter _router = GoRouter(
         GoRoute(
             path: 'home',
             builder: (BuildContext context, GoRouterState state) {
-              return BlocProvider.value(
-                  value: sl<EmployeeBloc>(), child: const HomeScreen());
+              return
+                MultiBlocProvider(providers: [
+                  BlocProvider.value(
+                      value: sl<EmployeeBloc>()),
+                  BlocProvider.value(value: sl<LocationCubit>()),
+                  BlocProvider.value(value: sl<InternetConnectionCubit>()),
+                ], child: const HomeScreen());
+
             },
             routes: <RouteBase>[
               GoRoute(

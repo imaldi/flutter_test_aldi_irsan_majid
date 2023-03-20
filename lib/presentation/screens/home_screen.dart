@@ -6,9 +6,11 @@ import 'package:flutter_test_aldi_irsan_majid/core/resources/helper/toast_helper
 import 'package:flutter_test_aldi_irsan_majid/core/usecase/usecase.dart';
 import 'package:flutter_test_aldi_irsan_majid/data/models/user_model.dart';
 import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/blocs/auth/auth_bloc.dart';
+import 'package:flutter_test_aldi_irsan_majid/presentation/state_managements/flutter_blocs/cubits/location/location_cubit.dart';
 import 'package:go_router/go_router.dart';
 
 import '../state_managements/flutter_blocs/blocs/employee/employee_bloc.dart';
+import '../state_managements/flutter_blocs/cubits/internet_connection/internet_connection_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -22,6 +24,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     context.read<EmployeeBloc>().add(ReadAllEmployeeEvent(NoParams()));
+    context.read<InternetConnectionCubit>().checkConnection();
+    context.read<LocationCubit>().getCurrentCoordinateAndAddress();
   }
 
   @override
@@ -29,79 +33,114 @@ class _HomeScreenState extends State<HomeScreen> {
     return BlocListener<AuthBloc, AuthState>(
       listener: (context, state) {
         print("State Auth in HomeScreen: ${state.runtimeType}");
-        if(state is AuthLogoutSuccess || state is NoCachedLogin){
+        if (state is AuthLogoutSuccess || state is NoCachedLogin) {
           context.pushReplacement("/$loginScreen");
         }
       },
-      child: Scaffold(
-        appBar: AppBar(title: Text("Daftar Karyawan"), actions: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: sizeMedium),
-            child: InkWell(
-                onTap: () {
-                  context.read<AuthBloc>().add(AuthLogoutEvent());
-                },
-                child: Icon(Icons.logout)),
-          )
-        ],),
-        body: BlocConsumer<EmployeeBloc, EmployeeState>(
-          listener: (c, s) {
-            if (s is CreateEmployeeSucces || s is UpdateEmployeeSucces ||
-                s is DeleteEmployeeSucces) {
-              if (s is CreateEmployeeSucces) {
-                myToast("Success Create Employee");
+      child: BlocListener<InternetConnectionCubit, InternetConnectionState>(
+        listener: (context, state) {
+          if(!state.isOnline){
+            myToast("Koneksi Internet Terputus");
+          }
+        },
+        child: Scaffold(
+          appBar: AppBar(title: Text("Daftar Karyawan"),
+            actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: sizeMedium),
+              child: InkWell(
+                  onTap: () {
+                    context.read<AuthBloc>().add(AuthLogoutEvent());
+                  },
+                  child: Icon(Icons.logout)),
+            )
+          ],),
+          body: BlocConsumer<EmployeeBloc, EmployeeState>(
+            listener: (c, s) {
+              if (s is CreateEmployeeSucces || s is UpdateEmployeeSucces ||
+                  s is DeleteEmployeeSucces) {
+                if (s is CreateEmployeeSucces) {
+                  myToast("Success Create Employee");
+                }
+                if (s is UpdateEmployeeSucces) {
+                  myToast("Success Update Employee");
+                }
+                if (s is CreateEmployeeSucces) {
+                  myToast("Success Delete Employee");
+                }
+                c.read<EmployeeBloc>().add(ReadAllEmployeeEvent(NoParams()));
               }
-              if (s is UpdateEmployeeSucces) {
-                myToast("Success Update Employee");
+            },
+            builder: (context, state) {
+              // var employeeState = context.read<EmployeeBloc>().state;
+              print("employeeState: $state");
+              if (state is EmployeeLoading) {
+                return const Center(child: CircularProgressIndicator(),);
               }
-              if (s is CreateEmployeeSucces) {
-                myToast("Success Delete Employee");
-              }
-              c.read<EmployeeBloc>().add(ReadAllEmployeeEvent(NoParams()));
-            }
-          },
-          builder: (context, state) {
-            // var employeeState = context.read<EmployeeBloc>().state;
-            print("employeeState: $state");
-            if (state is EmployeeLoading) {
-              return const Center(child: CircularProgressIndicator(),);
-            }
-            // if(state is EmployeeListEmpty){
-            //   return const Center(child: Text("Belum ada Karyawan"),);
-            // }
-            if (state is ReadAllEmployeeSucces) {
-              return
-                ListView.builder(
-                    itemCount: state.employeeList.length,
-                    itemBuilder: (c, i) {
-                      return Card(
-                        child: ListTile(
-                          onTap: () {
-                            context.push("/home/edit_employee",
-                                extra: state.employeeList[i].id);
-                          },
-                          title: Text(state.employeeList[i].name ?? "-"),
-                          trailing: InkWell(onTap: () {
-                            context.read<EmployeeBloc>().add(
-                                DeleteEmployeeEvent(UserParams(
-                                    User(id: state.employeeList[i].id))));
-                          },
-                            child: Icon(Icons.delete),
-                          ),
-                        ),
+              // if(state is EmployeeListEmpty){
+              //   return const Center(child: Text("Belum ada Karyawan"),);
+              // }
+              if (state is ReadAllEmployeeSucces) {
+                return
+                  Column(
+                    children: [
+                      Builder(
+                        builder: (context) {
+                          var state = context.watch<LocationCubit>().state;
+                          var address = state.address;
+                          var lat = state.latitude;
+                          var lng = state.longitude;
+                          print("address print: ${context.watch<LocationCubit>().state}");
+                          return Padding(
+                            padding: const EdgeInsets.all(sizeMedium),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Lokasi Saat Ini: $address"),
+                                Text("\nLatitude Saat Ini: $lat"),
+                                Text("Longitude Saat Ini: $lng"),
+                              ],
+                            ),
+                          );
+                        }
+                      ),
+                      ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: state.employeeList.length,
+                          itemBuilder: (c, i) {
+                            return Card(
+                              child: ListTile(
+                                onTap: () {
+                                  context.push("/home/edit_employee",
+                                      extra: state.employeeList[i].id);
+                                },
+                                title: Text(state.employeeList[i].name ?? "-"),
+                                trailing: InkWell(onTap: () {
+                                  context.read<EmployeeBloc>().add(
+                                      DeleteEmployeeEvent(UserParams(
+                                          User(id: state.employeeList[i].id))));
+                                },
+                                  child: Icon(Icons.delete),
+                                ),
+                              ),
 
-                      );
-                    });
-              // Center(child: Text(state.employeeList.toString()),);
-            }
-            return const Center(child: Text("Belum ada Karyawan"),);
-          },
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            context.push("/home/add_employee");
-          },
-          child: Icon(Icons.add),
+                            );
+                          }),
+                    ],
+                  );
+                // Center(child: Text(state.employeeList.toString()),);
+              }
+              return const Center(child: Text("Belum ada Karyawan"),);
+            },
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              context.push("/home/add_employee");
+            },
+            child: Icon(Icons.add),
+          ),
         ),
       ),
     );
