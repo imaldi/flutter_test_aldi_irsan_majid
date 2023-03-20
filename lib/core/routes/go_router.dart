@@ -10,6 +10,12 @@ final GoRouter _router = GoRouter(
       },
       routes: <RouteBase>[
         GoRoute(
+          path: 'login',
+          builder: (BuildContext context, GoRouterState state) {
+            return const LoginScreen();
+          },
+        ),
+        GoRoute(
             path: 'home',
             builder: (BuildContext context, GoRouterState state) {
               return BlocProvider.value(

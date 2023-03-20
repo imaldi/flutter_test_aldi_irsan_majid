@@ -20,9 +20,9 @@ class _SplashScreenState extends State<SplashScreen> {
     // bool isLogin = false;
     // if(authState is )
 
-    Future.delayed(Duration(seconds: 3), () {
-
-    });
+    // Future.delayed(Duration(seconds: 3), () {
+    //
+    // });
   }
 
   @override
@@ -30,10 +30,12 @@ class _SplashScreenState extends State<SplashScreen> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is NoCachedLogin) {
-          context.pushReplacement("/$homeScreen");
+          context.pushReplacement("/$loginScreen");
+          // context.pushReplacement("/$homeScreen");
+
         }
         if (state is AuthLoginSuccess) {
-          context.pushReplacement("/$detailScreen");
+          context.pushReplacement("/$homeScreen");
         }
       },
       builder: (context, state) {
